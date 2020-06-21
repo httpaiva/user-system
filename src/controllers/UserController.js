@@ -23,5 +23,14 @@ module.exports = {
         catch(error){
             return response.status(400).send(error);
         }
+    },
+    //Exemplo de rota protegida
+    async index(request, response){
+        try{
+            const users = await connection('users').select('*');
+            return response.send({users});
+        }catch(error){
+            return response.status(400).send(error);
+        }
     }
 }
