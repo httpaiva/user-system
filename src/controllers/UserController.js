@@ -1,5 +1,7 @@
 const connection = require('../database/connection');
 const bcrypt = require('bcrypt');
+const jwt = require('../utils/jwt');
+
 
 module.exports = {
     async create(request, response) {
@@ -13,7 +15,10 @@ module.exports = {
                 email,
                 password: encryptedPassword
             });
-            return response.status(200);
+
+            const token = jwt.sign({user: user_id});
+
+            return response.status(200).send({token});
         }
         catch(error){
             return response.status(400).send(error);

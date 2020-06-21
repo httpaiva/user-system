@@ -1,5 +1,6 @@
 const connection = require('../database/connection');
 const bcrypt = require('bcrypt');
+const jwt = require('../utils/jwt');
 
 module.exports = {
     async login(request, response) {
@@ -21,9 +22,11 @@ module.exports = {
 
         bcrypt.compare(password, user.password, function(error, same) {
             if(same) {
-                return response.json(user);
+                const token = jwt.sign({user: user.id});
+
+                return response.status(200).send({user, token});
             } else {
-                return response.status(401).send({message: 'Wrong password'});
+                return response.status(401).send({error, message: 'Wrong password'});
             } 
         });
     }
