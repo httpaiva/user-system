@@ -1,6 +1,7 @@
 const connection = require('../database/connection');
 const bcrypt = require('bcrypt');
 const jwt = require('../utils/jwt');
+const generateuuid = require('../utils/generateUUID');
 
 
 module.exports = {
@@ -10,7 +11,10 @@ module.exports = {
         try {
             const encryptedPassword = await bcrypt.hash(password, 10);
 
-            const [user_id] = await connection('users').insert({
+            const user_id = await generateuuid();
+
+            await connection('users').insert({
+                id: user_id,
                 name,
                 email,
                 password: encryptedPassword
