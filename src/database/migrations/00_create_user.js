@@ -3,7 +3,7 @@ const knex = require('knex');
 exports.up = function(knex) {
     // CRIA TABELA
     return knex.schema.createTable('users', function (table){
-      table.increments();
+      table.string('id').primary();
       table.string('name').notNullable();
       table.string('email').notNullable().unique();
       table.string('password').notNullable();
