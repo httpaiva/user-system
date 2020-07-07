@@ -17,16 +17,16 @@ module.exports = {
             }
 
             const encryptedPassword = await bcrypt.hash(password, 10);
-            const user_id = await generateuuid();
+            const userId = await generateuuid();
 
             await connection('users').insert({
-                id: user_id,
+                id: userId,
                 name,
                 email,
                 password: encryptedPassword
             });
 
-            const token = jwt.sign({ user: user_id });
+            const token = jwt.sign({ user: userId });
 
             return response.status(200).send({ token });
         }
