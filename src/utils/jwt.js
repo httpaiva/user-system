@@ -5,5 +5,6 @@ const secret = process.env.JWT_SECRET;
 
 module.exports = {
     sign: payload => jwt.sign(payload, secret, { expiresIn: 86400}),
-    verify: token => jwt.verify(token, secret)
+    verify: token => jwt.verify(token, secret),
+    forgetPasswordToken: payload => jwt.sign(payload, secret, { expiresIn: 1800 })
 }

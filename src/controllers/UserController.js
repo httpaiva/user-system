@@ -1,6 +1,7 @@
 const connection = require('../database/connection');
 const bcrypt = require('bcrypt');
 const jwt = require('../utils/jwt');
+const generateuuid = require('../utils/generateUUID');
 
 
 module.exports = {
@@ -8,28 +9,37 @@ module.exports = {
         const { name, email, password } = request.body;
 
         try {
-            const encryptedPassword = await bcrypt.hash(password, 10);
+            const emailExists = await connection('users').where('email', email).select('email').first();
 
-            const [user_id] = await connection('users').insert({
+
+            if (emailExists) {
+                return response.status(409).send('Email already exists!');
+            }
+
+            const encryptedPassword = await bcrypt.hash(password, 10);
+            const userId = await generateuuid();
+
+            await connection('users').insert({
+                id: userId,
                 name,
                 email,
                 password: encryptedPassword
             });
 
-            const token = jwt.sign({user: user_id});
+            const token = jwt.sign({ user: userId });
 
-            return response.status(200).send({token});
+            return response.status(200).send({ token });
         }
-        catch(error){
+        catch (error) {
             return response.status(400).send(error);
         }
     },
     //Exemplo de rota protegida
-    async index(request, response){
-        try{
+    async index(request, response) {
+        try {
             const users = await connection('users').select('*');
-            return response.send({users});
-        }catch(error){
+            return response.send({ users });
+        } catch (error) {
             return response.status(400).send(error);
         }
     }
