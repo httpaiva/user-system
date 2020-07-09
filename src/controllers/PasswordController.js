@@ -1,5 +1,6 @@
 const connection = require('../database/connection');
 const jwt = require('../utils/jwt');
+const sendMail = require('../utils/sendMail');
 const bcrypt = require('bcrypt');
 
 require('dotenv/config');
@@ -18,11 +19,16 @@ module.exports = {
             const userId = data.id;
 
             const resetToken = jwt.forgetPasswordToken({ user: userId });
-            const resetPasswordLink = `${process.env.FRONTEND_LINK || 'localhost:3000'}/forgotpassword/${resetToken}`;
+            const resetPasswordLink = `http://${process.env.FRONTEND_LINK || 'localhost:3000'}/forgotpassword/${resetToken}`;
 
-            return response.status(200).send(resetPasswordLink);
+            emailStatus = sendMail.sendRecoveryMail(userEmail, resetPasswordLink);
             
-            // Still needs to send email and return success!!!!
+            if(!emailStatus){
+                return response.status(400).send('Could not send email');
+            }
+            else{
+                return response.status(200).send('Email successfully sent!');
+            }
         }
         catch (error) {
             return response.status(400).send(error);
