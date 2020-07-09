@@ -8,6 +8,7 @@
 - Knex (usando SQLITE)
 - Nodemailer
 
+
 ## Como iniciar o projeto:
 
   Para iniciar o projeto primeiro tem que ter instalado na sua máquina o NodeJS e um package manager (npm ou yarn):
@@ -110,6 +111,7 @@ Passo 4 - Rode a migrate do banco de dados:
 
   Para usar a rota de redefinição de senha, faça a requisição para http://localhost:3333/forgotpassword, usando o método PUT passando no header Authorization: Bearer + Token, sendo esse novo Token encontrado no fim do link fictício citado anteriormente. Também passe a nova senha no corpo da requisição, numa variável chamada "newPassword".
 
+  Após logado, o usuário terá acesso à rota protegida com JWT [http://localhost:3333/](http://localhost:3333/login)users, usando o método GET e passando no header Authorization: Bearer + Token. Esse Token deve ser válido, retornado pelo cadastro ou pelo login.
 
 
 ### Contato:
