@@ -6,6 +6,7 @@
 - Express
 - JWT 
 - Knex (usando SQLITE)
+- Nodemailer
 
 ## Como iniciar o projeto:
 
@@ -53,6 +54,14 @@ Passo 4 - Rode a migrate do banco de dados:
 
  `   JWT_SECRET=seu_secret_aqui`
 
+  Para utilizar o serviço de e-mail para recuperação da senha, seu .env também deve ter os seguintes campos:
+
+  ``` 
+    EMAIL_ACCOUNT=endereço_de_email_do_seu_user-system
+
+    EMAIL_PASSWORD=sua_senha
+  ```
+
   Passo 6 - Inicie o servidor:
 
 ​    Com npm:
@@ -95,7 +104,11 @@ Passo 4 - Rode a migrate do banco de dados:
 
   Para usar a rota de login, faça a requisição para http://localhost:3333/login, usando o método GET, com um header com Basic Authentication usando o email e a senha cadastrados previamente.
 
-  Após logado, o usuário terá acesso à rota protegida com JWT [http://localhost:3333/](http://localhost:3333/login)users, usando o método GET e passando no header Authorization: Bearer + Token. Esse Token deve ser válido, retornado pelo cadastro ou pelo login.
+  Após logado, o usuário terá acesso à rota protegida com JWT http://localhost:3333/users, usando o método GET e passando no header Authorization: Bearer + Token. Esse Token deve ser válido, retornado pelo cadastro ou pelo login.
+
+  Para usar a rota de solicitação de nova senha, faça a requisição para http://localhost:3333/forgotpassword, usando o método POST e passando o e-mail do usuário cadastrado que trocará sua senha, numa variável chamada "userEmail". Esse usuário receberá um link para um front-end fictício que fará a requisição para a próxima rota, que mudará efetivamente sua senha.
+
+  Para usar a rota de redefinição de senha, faça a requisição para http://localhost:3333/forgotpassword, usando o método PUT passando no header Authorization: Bearer + Token, sendo esse novo Token encontrado no fim do link fictício citado anteriormente. Também passe a nova senha no corpo da requisição, numa variável chamada "newPassword".
 
 
 
